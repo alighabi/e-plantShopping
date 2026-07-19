@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { useDispatch } from 'react-redux';
+import { addItem } from './CartSlice';
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-
+    const [addedToCart, setAddedToCart] = useState({});
+    const dispatch = useDispatch();
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -252,6 +255,16 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+    
+        const handleAddToCart = (plant) => {
+            dispatch(addItem(plant));
+            setAddedToCart((prevState) => ({
+              ...prevState,
+              [plant.name]: true
+            }));
+        };
+        
+    
     return (
         <div>
             <div className="navbar" style={styleObj}>
@@ -274,14 +287,34 @@ function ProductList({ onHomeClick }) {
             </div>
             {!showCart ? (
                 <div className="product-grid">
+                    {plantsArray.map((category) => (
+  <div>
+    {category.plants.map((plant) => (
+      <div>
+        <img src={plant.image} alt={plant.name} />
+        <h1>{plant.name}</h1>
+        <p>{plant.description}</p>
+        <p>{plant.cost}$</p>
+        <button onClick={() => handleAddToCart(plant)}>
+  Aggiungi al Carrello
+</button>
+      </div>
+    ))}
+  </div>
+))}
 
 
                 </div>
             ) : (
-                <CartItem onContinueShopping={handleContinueShopping} />
+                <CartItem onContinueShopping={handleContinueShopping} 
+                />
+                
+
+                
             )}
         </div>
     );
 }
+
 
 export default ProductList;
