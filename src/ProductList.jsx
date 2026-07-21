@@ -257,6 +257,7 @@ function ProductList({ onHomeClick }) {
     };
     
         const handleAddToCart = (plant) => {
+            console.log('Click su Aggiungi al Carrello:', plant);
             dispatch(addItem(plant));
             setAddedToCart((prevState) => ({
               ...prevState,
